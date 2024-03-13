@@ -1,0 +1,142 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Persegi Panjang Calculator',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: PersegiPanjangCalculator(),
+    );
+  }
+}
+
+class PersegiPanjangCalculator extends StatefulWidget {
+  @override
+  _PersegiPanjangCalculatorState createState() =>
+      _PersegiPanjangCalculatorState();
+}
+
+class _PersegiPanjangCalculatorState extends State<PersegiPanjangCalculator> {
+  late TextEditingController _panjangController;
+  late TextEditingController _lebarController;
+
+  double luas = 0.0;
+  double keliling = 0.0;
+
+  @override
+  void initState() {
+    _panjangController = TextEditingController();
+    _lebarController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _panjangController.dispose();
+    _lebarController.dispose();
+    super.dispose();
+  }
+
+  void _hitung() {
+    int panjang = int.parse(_panjangController.text);
+    int lebar = int.parse(_lebarController.text);
+
+    setState(() {
+      luas = panjang * lebar.toDouble();
+      keliling = 2 * (panjang + lebar).toDouble();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var elevatedButton = ElevatedButton(
+              onPressed: _hitung,
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                child: Text(
+                  'Hitung',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            );
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Persegi Panjang Calculator',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _panjangController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Panjang',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            TextField(
+              controller: _lebarController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Lebar',
+                border: const OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            elevatedButton,
+            const SizedBox(height: 20.0),
+            SizedBox(
+              width: double.infinity,
+              child: Card(
+                elevation: 4,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Hasil Perhitungan:',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Luas Persegi Panjang: $luas',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'Keliling Persegi Panjang: $keliling',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
